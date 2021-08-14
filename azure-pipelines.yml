@@ -37,3 +37,20 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'warfile'
     publishLocation: 'Container'
+
+- powershell: |
+   (Get-Item "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe").VersionInfo 
+  displayName: 'We want to know the Chrome version installed on this darned machine'
+
+- script: pip install robotframework robotframework-pabot robotframework-seleniumlibrary webdrivermanager
+  displayName: 'Install Python dependencies'
+
+- script: webdrivermanager chrome:$(ChromeVersion) --linkpath AUTO
+  displayName: 'Manage Chrome webdriver version'
+
+- powershell: |
+   Write-Host "Robot Framework tests"
+   robot -x 'outputxunit.xml' '$(Build.SourcesDirectory)\tests\.'
+  failOnStderr: true
+  displayName: 'Run Robot Framework Tests'
+  continueOnError: true
