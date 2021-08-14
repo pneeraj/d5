@@ -3,6 +3,14 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java selenium
 #this is updated selenium 123123
+
+schedules:
+  - cron: "* * * * *"
+    displayName: Every munits
+    branches:
+      include:
+        - master
+
 trigger:
 - master
 
